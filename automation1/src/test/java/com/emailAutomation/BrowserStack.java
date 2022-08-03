@@ -1,5 +1,8 @@
 package com.emailAutomation;
 
+import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -7,19 +10,38 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class BrowserStack {
+public class BrowserStack{
+		
 	WebDriver driver;
+	public static final String USERNAME = "avanishsharma_gRSLlx";
+	public static final String AUTOMATE_KEY = "j9EfZmhkfF1QQJv5Wp27";
+	public static final String URL = "https://" + USERNAME + ":" + AUTOMATE_KEY + "@hub.browserstack.com/wd/hub";
 	
+
+	@Parameters({"os", "osVersion", "browserName", "browserVersion"})
 	@BeforeMethod
-	public void beforemethod()
+	public void beforemethod1(String browserName, String os, String osVersion, String browserVersion) throws MalformedURLException
+	
 	{
-		System.setProperty("webdriver.chrome.driver","C:\\Users\\avasharm\\myorders-selenium-tests\\myOrders\\Resources\\Drivers\\chromedriver.exe");
-		 driver = new ChromeDriver();
+		//System.setProperty("webdriver.chrome.driver","C:\\Users\\avasharm\\myorders-selenium-tests\\myOrders\\Resources\\Drivers\\chromedriver.exe");
+		
+		 
+		 DesiredCapabilities capabilities = new DesiredCapabilities();
+			capabilities.setCapability("browserName", browserName);
+			capabilities.setCapability("browserVersion", browserVersion);
+			capabilities.setCapability("os", os);
+			capabilities.setCapability("osVersion", osVersion);
+			HashMap<String, Object> browserstackOptions = new HashMap<String, Object>();
 		    //String url = "http://flipkart.com/";
+			 driver = new RemoteWebDriver(new java.net.URL (URL), capabilities );
+			//driver = new ChromeDriver();
 			
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
